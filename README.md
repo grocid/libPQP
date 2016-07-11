@@ -8,3 +8,7 @@ A simplistic prototype of encrypt.life in python. Focus has been on the QC-MDPC 
 
 ##The receiver end
 ![protocol receiver](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/receiver.png)
+
+#Academic papers
+[MDPC-McEliece: New McEliece Variants from
+Moderate Density Parity-Check Codes](https://eprint.iacr.org/2012/409.pdf)
