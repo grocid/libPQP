@@ -8,7 +8,6 @@ def to_bin(vec, length):
 def from_bin(binary):
     return np.array([int(x) for x in bin(int(hexlify(binary), 16))[2:]])
 
-
 def get_vector(p, weight):
     coefficients = np.array([0] * (p - weight) + [1] * weight)
     np.random.shuffle(coefficients)
