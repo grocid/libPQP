@@ -10,5 +10,6 @@ A simplistic prototype of encrypt.life in python. Focus has been on the QC-MDPC 
 ![protocol receiver](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/receiver.png)
 
 #Academic papers
-[MDPC-McEliece: New McEliece Variants from
-Moderate Density Parity-Check Codes](https://eprint.iacr.org/2012/409.pdf)
+[MDPC-McEliece: New McEliece Variants from Moderate Density Parity-Check Codes](https://eprint.iacr.org/2012/409.pdf)
+[Lightweight Code-based Cryptography: QC-MDPC McEliece Encryption on Reconfigurable Devices](https://www.date-conference.com/files/proceedings/2014/pdffiles/03.3_1.pdf)
+[Squaring attacks on McEliece public-key cryptosystems using quasi-cyclic codes of even dimension](http://link.springer.com/article/10.1007/s10623-015-0099-x)

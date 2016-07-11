@@ -7,6 +7,8 @@ from arithmetic import *
 from private_key import *
 from qcmdpc import *
 
+from distinguisher import *
+
 priv_key = Privatekey()
 receiver_pkc_cipher = McEliece()
 receiver_pkc_cipher.set_private_key(priv_key)
@@ -62,4 +64,12 @@ print "MESSAGE:       ", decrypted_symmetric.decrypt(symmetric_stream)
 print "HMAC verified: ", mac == decrypted_mac
 
 ############################################################
+
+# Distinguisher susceptibility
+# https://grocid.net/2015/01/28/attack-on-prime-length-qc-mdpc/
+
+#distinguisher = Distinguisher(priv_key.block_error, priv_key.block_weight)
+#if distinguisher.distinguish(c_0) and distinguisher.distinguish(c_1):
+#    print "Both blocks distinguished"
+
 
