@@ -1,12 +1,13 @@
 import numpy as np
 from binascii import hexlify, unhexlify
 
-def to_bin(vec):
+def to_bin(vec, length):
     num = int(''.join([str(x) for x in list(vec)]), 2)
-    return unhexlify('{1:0{0}x}'.format(2, num))
+    return ('%%0%dx' % (length << 1) % num).decode('hex')[-length:] # libnum
     
 def from_bin(binary):
     return np.array([int(x) for x in bin(int(hexlify(binary), 16))[2:]])
+
 
 def get_vector(p, weight):
     coefficients = np.array([0] * (p - weight) + [1] * weight)

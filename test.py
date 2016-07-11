@@ -21,7 +21,6 @@ G = receiver_pkc_cipher.get_public_key()
 
 sender_pkc_cipher = McEliece()
 
-
 saltA = b'this is just a salt'
 saltB = b'this is another a salt'
 ivSalt = b'third salt'
@@ -33,7 +32,7 @@ message = b'this is a really secret message that is padded with some random.'
 
 # generate random messge
 tag = get_vector(block_length, 1600)
-secret = to_bin(tag)
+secret = to_bin(tag, block_length / 8)
 keyA = sha256(str(secret) + saltA).digest() # just some conversion
 keyB = sha256(str(secret) + saltB).digest()
 
@@ -55,7 +54,7 @@ ciphertext = c_0, c_1, \
 
 rc_0, rc_1, symmetric_stream, mac = ciphertext
 
-decrypted_secret = to_bin(receiver_pkc_cipher.decrypt(rc_0, rc_1))
+decrypted_secret = to_bin(receiver_pkc_cipher.decrypt(rc_0, rc_1), block_length / 8)
 decrypted_keyA = sha256(str(decrypted_secret) + saltA).digest() # just some conversion
 decrypted_keyB = sha256(str(decrypted_secret) + saltB).digest()
 
