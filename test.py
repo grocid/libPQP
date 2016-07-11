@@ -62,7 +62,7 @@ decrypted_keyB = sha256(str(decrypted_secret) + saltB).digest()
 decrypted_iv = sha512(str(decrypted_secret) + ivSalt).digest()[0:16]
 decrypted_symmetric = AES.new(decrypted_keyA, AES.MODE_CBC, decrypted_iv)
 
-decrypted_mac = sha256(message + str(secret)).digest()
+decrypted_mac = sha256(message + str(decrypted_secret)).digest()
 
 print "MESSAGE:       ", decrypted_symmetric.decrypt(symmetric_stream)
 print "HMAC verified: ", mac == decrypted_mac
