@@ -2,4 +2,4 @@
 A simplistic prototype of encrypt.life in python
 
 # High-level description of the desired final result
-[[proto.png]]
+[[https://raw.githubusercontent.com/grocid/encrypt.life-python/master/proto.png]]
