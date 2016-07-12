@@ -1,5 +1,7 @@
 # encrypt.life-python
-A simplistic prototype of encrypt.life in python. Focus has been on the QC-MDPC part, not the protocol. You may find vulnerabilities in the current implementation. Also, because of the numpy FFT, prime power is not used.
+This is a simplistic prototype of [encrypt.life](encrypt.life) in Python. It is not production ready and should not be used in a real-life context. 
+
+In this prototype, the focus has mainly been on the QC-MDPC part, not the actual protocol. You may find vulnerabilities in the current implementation. Also, because of the FFT implementation is Numpy, prime-power block length is not used. See below for known vulnerabilities.
 
 Below are given the proposed parameters for rate R = 1/2.
 
@@ -12,13 +14,40 @@ Below are given the proposed parameters for rate R = 1/2.
 # High-level description of the desired final result
 
 ##The sender side
-The protocol is based on Fujisaki-Okamoto
+
+In this section, we will briefly described the protocol.
+
+Assume that Bob wants to send Alice a message. Denote Alice's keypair (pubkey, privkey). Bob takes the following steps: 
+
+```
+1. Bob picks a random token T.
+2. He then uses Alice's public key denoted pubkey and encrypts the token T using QC-MDPC McEliece.
+3. The token T is used to generate the symmetric key k₁ and the MAC key k₂ (PBKDF2).
+4. The error vector used in the second step is concatenated with the message and a MAC is generated using k₂.
+4. The message and the MAC are then encrypted with symmetric key.
+5. The ciphertext is then the concatenation of the encrypted token and encrypted message + MAC.
+```
+
 
 ![protocol sender](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/sender.png)
 
-###Possibile vulnerabilities
+##The receiver end
 
-#####Decryption oracle
+Now Alice wants to decrypt the message sent by Bob.
+
+```
+1. Alice decrypted the encrypted token using her private key privkey. In the decryption, the error vector is determined.
+2. Using the token, she derives the same symmetric key k₁ as Bob and decrypts the message.
+3. The message and the MAC are extracted.
+4. The MAC of the message and error vector is verified using the key k₂ derived from the token.
+5. If the verification returns True, Alice accepts the message. Otherwise she rejects it.
+```
+
+![protocol receiver](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/receiver.png)
+
+##Possibile vulnerabilities
+
+###Decryption oracle
 The protocol can be designed using normal McEliece or Niederreiter. In case of McEliece, the error vector should be part of the authentication (for instance, generate MAC using a concatenation of message and error vector). Such a measure will mitigate the usual decryption oracle attack, described below.
 
 ```
@@ -32,13 +61,13 @@ Obviously, there is an implicit assumption that the receiver will either reject 
 
 If the protocol instead is designed using the Niederreiter model, the error vector will be/encode the token. In this case, there is no need to authenticate the error vector, since any flipped bit in the cipher text will cause the receiver to deocde a different token, hence breaking the decryption oracle.
 
-#####Timing attacks
+###Timing attacks
 
 This is a slight variation of the above. Instead of observing decryption errors, we measure the timing. There has been some effort in making decoding run in constant time. See [this paper](http://www.win.tue.nl/~tchou/papers/qcbits.pdf).
 
 The decoding we use is probabilistic and susceptible to timing attacks. However, in the PGP-like setting we do not worry too much about this.
 
-#####Distinguishing attacks
+###Distinguishing attacks
 
 The simplest imaginable distinguisher will detect a constant-error encryption with probability 1. 
 
@@ -56,14 +85,11 @@ We can thwart this attack completely by picking the error weight odd with probab
 2. If the coin shows tails, pick a position at random and flip it.
 ```
 
-#####Squaring/subcode attacks
+###Squaring/subcode attacks
 
 Squaring attacks exploit that (the now deprecated) p = 4800 = 2⁶ × 75. By squaring the polynomial, the vector space decreases in size by a factor 2 (which can be done six times). It also causes collisions in the error vector, making it to decrease in weight. This allows an attacker to go quite far below 80-bit security. See [this paper](http://link.springer.com/article/10.1007/s10623-015-0099-x).
 
 This attack is mitigated by picking a prime block length p. In the example above, p = 4801.
-
-##The receiver end
-![protocol receiver](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/receiver.png)
 
 #Academic papers
 [MDPC-McEliece: New McEliece Variants from Moderate Density Parity-Check Codes](https://eprint.iacr.org/2012/409.pdf)
