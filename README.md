@@ -1,11 +1,13 @@
 # encrypt.life-python
 A simplistic prototype of encrypt.life in python. Focus has been on the QC-MDPC part, not the protocol. You may find vulnerabilities in the current implementation. Also, because of the numpy FFT, prime power is not used.
 
+Below are given the proposed parameters for rate R = 1/2.
+
 | Public-key size | Private-key size |  Rate         | Error weight  | Bit security |
 | ---------------:|----------------:| --------------:|--------------:|-------------:|
-| 4801            | 9602             |     1/2       |     84        |   80         |
-| 9857            | 19714            |     1/2       |      134      |   128        |
-| 32771           | 65542            |     1/2       |     264       |   256        |
+|      4801            | 9602             |     1/2       |     84        |   80         |
+|      9857            | 19714            |     1/2       |      134      |   128        |
+|       32771           | 65542            |     1/2       |     264       |   256        |
 
 # High-level description of the desired final result
 
