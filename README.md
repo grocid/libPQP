@@ -1,5 +1,5 @@
 # encrypt.life-python
-This is a simplistic prototype of [encrypt.life](encrypt.life) in Python. It is not production ready and should not be used in a real-life context. 
+This is a simplistic prototype of [encrypt.life](http://encrypt.life) in Python. It is not production ready and should not be used in a real-life context. 
 
 In this prototype, the focus has mainly been on making the QC-MDPC part efficient and not the actual protocol. Hence, you may find vulnerabilities in the current implementation of the protocol. Also, the primitives used in the code are not the ones mentioned below. This prototype uses:
 
