@@ -6,6 +6,8 @@ A simplistic prototype of encrypt.life in python. Focus has been on the QC-MDPC 
 ##The sender side
 The protocol is based on Fujisaki-Okamoto
 
+![protocol sender](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/sender.png)
+
 ###Possibile vulnerabilities
 
 #####Decryption oracle
@@ -35,9 +37,7 @@ The theory is described in more detail [here](https://grocid.net/2015/01/28/atta
 
 #####Squaring/subcode attacks
 
-Squaring attacks exploit that (the now deprecated) p = 4800 = 2⁶ × 75. By squaring the polynomial, the vector space decreases in size by a factor 2. It also causes collisions in the error vector, making it to decrease in weight. This allows an attacker to go quite far below 80-bit security. See [this paper](http://link.springer.com/article/10.1007/s10623-015-0099-x).
-
-![protocol sender](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/sender.png)
+Squaring attacks exploit that (the now deprecated) p = 4800 = 2⁶ × 75. By squaring the polynomial, the vector space decreases in size by a factor 2 (which can be done six times). It also causes collisions in the error vector, making it to decrease in weight. This allows an attacker to go quite far below 80-bit security. See [this paper](http://link.springer.com/article/10.1007/s10623-015-0099-x).
 
 ##The receiver end
 ![protocol receiver](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/receiver.png)
