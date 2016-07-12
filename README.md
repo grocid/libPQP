@@ -33,11 +33,20 @@ The simplest imaginable distinguisher will detect a constant-error encryption wi
 2. Sum all symbols mod 2 and check if it equals (l + w) mod 2.
 ```
 
-The theory is described in more detail [here](https://grocid.net/2015/01/28/attack-on-prime-length-qc-mdpc/)
+The theory is described in more detail [here](https://grocid.net/2015/01/28/attack-on-prime-length-qc-mdpc/).
+
+We can thwart this attack completely by picking the error weight odd with probability 1/2:
+
+```
+1. Flip a balanced coin.
+2. If the coin shows tails, pick a position at random and flip it.
+```
 
 #####Squaring/subcode attacks
 
 Squaring attacks exploit that (the now deprecated) p = 4800 = 2⁶ × 75. By squaring the polynomial, the vector space decreases in size by a factor 2 (which can be done six times). It also causes collisions in the error vector, making it to decrease in weight. This allows an attacker to go quite far below 80-bit security. See [this paper](http://link.springer.com/article/10.1007/s10623-015-0099-x).
+
+This attack is mitigated by picking a prime block length p.
 
 ##The receiver end
 ![protocol receiver](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/receiver.png)
