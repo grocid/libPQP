@@ -24,6 +24,12 @@ Obviously, there is an implicit assumption that the receiver will either reject 
 
 If the protocol instead is designed using the Niederreiter model, the error vector will be/encode the token. In this case, there is no need to authenticate the error vector, since any flipped bit in the cipher text will cause the receiver to deocde a different token, hence breaking the decryption oracle.
 
+#####Timing attacks
+
+This is a slight variation of the above. Instead of observing decryption errors, we measure the timing. There has been some effort in making decoding run in constant time. See [this paper](http://www.win.tue.nl/~tchou/papers/qcbits.pdf).
+
+The decoding we use is probabilistic and susceptible to timing attacks. However, in the PGP-like setting we do not worry too much about this.
+
 #####Distinguishing attacks
 
 The simplest imaginable distinguisher will detect a constant-error encryption with probability 1. 
