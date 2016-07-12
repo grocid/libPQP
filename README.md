@@ -3,11 +3,11 @@ This is a simplistic prototype of [encrypt.life](encrypt.life) in Python. It is 
 
 In this prototype, the focus has mainly been on making the QC-MDPC part efficient and not the actual protocol. Hence, you may find vulnerabilities in the current implementation of the protocol. Also, the primitives used in the code are not the ones mentioned below. This prototype uses:
 
-* AES-256(m, k) as symmetric cipher,
-* SHA-256(token + salt) as PBKDF2
-* A trucated SHA-512
+* AES-256(m, k, iv) as symmetric cipher,
+* SHA-256(token + salt) as PBKDF2,
+* A truncated SHA-512(token + salt) for iv.
 
-Also, because of the FFT implementation is Numpy, prime-power block length is not used. See below for known vulnerabilities.
+Speed-ups in the decoding use the fast fourier transform (FFT) to achieve O(n log n) complexity in modular polynomial multiplications, instead of O(n²). Because of the FFT implementation in Numpy is restricted to certain lengths (multiples of powers of 2), prime-power block length is not used. See below for known vulnerabilities.
 
 Below are given the proposed parameters for rate R = 1/2.
 
@@ -17,7 +17,7 @@ Below are given the proposed parameters for rate R = 1/2.
 |      9857            | 19714            |     1/2       |      134      |   128        |
 |       32771          | 65542            |     1/2       |     264       |   256        |
 
-These are 
+Since the encrypted token is a codeword of length 9602, we add approximately 1200 bytes of data to the ciphertext. Apart from this, a 32-byte MAC is included. This inflates a (padded) message of size M to size 1232 + M.
 
 # High-level description of the desired final result
 
