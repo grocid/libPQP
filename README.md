@@ -95,6 +95,8 @@ The theory is described in more detail [here](https://grocid.net/2015/01/28/atta
 2. If the coin shows tails, pick a position at random and flip it.
 ```
 
+This attack is contained in [distinguisher.py](https://github.com/grocid/encrypt.life-python/blob/master/distinguisher.py).
+
 ###Squaring/subcode attacks
 
 Squaring attacks exploit that (the now deprecated) p = 4800 = 2⁶ × 75. By squaring the polynomial, the vector space decreases in size by a factor 2 (which can be done six times). It may also lead to collisions in the error vector, causing a decrease in error weight. This allows an attacker to go quite far below 80-bit security. See [this paper](http://link.springer.com/article/10.1007/s10623-015-0099-x).
