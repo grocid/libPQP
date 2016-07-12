@@ -7,16 +7,16 @@ In this prototype, the focus has mainly been on making the QC-MDPC part efficien
 * SHA-256(token + salt) as PBKDF2,
 * A truncated SHA-512(token + salt) for iv.
 
-Speed-ups in the decoding use the fast fourier transform (FFT) to achieve O(n log n) complexity in modular polynomial multiplications, instead of O(n²). Because of the FFT implementation in Numpy is restricted to certain lengths (multiples of powers of 2), prime-power block length is not used. See below for known vulnerabilities.
+Speed-ups in the decoding use the fast fourier transform (FFT) to achieve O(n log n) complexity in modular polynomial multiplications, instead of O(n²). Because of that the FFT implementation in Numpy is restricted to certain lengths (multiples of powers of 2), prime-power block length is not used. See below for known vulnerabilities.
 
 Below are given the proposed parameters for rate R = 1/2.
 
-| Public-key size | Private-key size |  Rate         | Error weight  | Bit security |
+| Public-key size | Private-key size |  Rate          | Error weight  | Bit security |
 | ---------------:|-----------------:| --------------:|--------------:|-------------:|
-|      4801       | 9602             |     1/2       |     84        |   80         |
-|      9857       | 19714            |     1/2       |     134      |    128        |
-|       32771     | 65542            |     1/2       |     264       |   256        |
-
+|      4801       | 9602             |     1/2        |     84        |   80         |
+|      9857       | 19714            |     1/2        |     134       |    128        |
+|       32771     | 65542            |     1/2        |     264       |   256        |
+ 
 Since the encrypted token is a codeword of length 9602, we add approximately 1200 bytes of data to the ciphertext. Apart from this, a 32-byte MAC is included. This inflates a (padded) message of size M to size 1232 + M.
 
 # High-level description of the desired final result
@@ -30,8 +30,8 @@ In this section, we will briefly describe the protocol. Much like a Fujisaki-Oka
 2. He then uses Alice's public key denoted pubkey and encrypts the token T using QC-MDPC McEliece.
 3. The token T is used to generate the symmetric key k₁ and the MAC key k₂ (PBKDF2).
 4. The error vector used in the second step is concatenated with the message and a MAC is generated using k₂.
-4. The message and the MAC are then encrypted with symmetric key.
-5. The ciphertext is then the concatenation of the encrypted token and encrypted message + MAC.
+4. The message and the MAC are then encrypted with the symmetric key k₁.
+5. The ciphertext is the concatenation of the encrypted token and encrypted message + MAC.
 ```
 
 The ciphertext can now be distributed to Alice, using arbitrary means of communication. Below is a graphical interpretation of the above steps.
@@ -44,8 +44,8 @@ The ciphertext can now be distributed to Alice, using arbitrary means of communi
 Now Alice wants to decrypt the message sent by Bob. She performs the following steps in order to do so:
 
 ```
-1. Alice decrypted the encrypted token using her private key privkey. In the decryption, the error vector is determined.
-2. Using the token, she derives the same symmetric key k₁ as Bob and decrypts the message.
+1. Alice decrypts the encrypted token T using her private key privkey. In the decryption, the error vector is determined.
+2. Using the decrypted token T, she derives the same symmetric key k₁ as Bob and decrypts the message.
 3. The message and the MAC are extracted.
 4. The MAC of the message and error vector is verified using the key k₂ derived from the token.
 5. If the verification returns True, Alice accepts the message. Otherwise she rejects it.
@@ -62,14 +62,14 @@ The protocol can be designed using normal McEliece or Niederreiter. In case of M
 
 ```
 1. Intercept an encrypted message.
-2. Pick a random bit the ciphertext.
+2. Pick a random bit of the ciphertext.
 3. Flip it. If decryption fails, this was not an error position.
 4. Repeat until all error positions have been unraveled.
 ```
 
 Obviously, there is an implicit assumption that the receiver will either reject any error larger than T or the decoder will fail (which is rarely the case).
 
-If the protocol instead is designed using the Niederreiter model, the error vector will be/encode the token. In this case, there is no need to authenticate the error vector, since any flipped bit in the cipher text will cause the receiver to deocde a different token, hence breaking the decryption oracle.
+If the protocol instead is designed using the Niederreiter model, the error vector will be/encode the token. In this case, there is no need to authenticate the error vector. Since any flipped bit in the ciphertext will cause the receiver to decode a different token, it will break the decryption oracle.
 
 ###Timing attacks
 
@@ -86,9 +86,7 @@ The simplest imaginable distinguisher will detect a constant-error encryption wi
 2. Sum all symbols mod 2 and check if it equals (l + w) mod 2.
 ```
 
-The theory is described in more detail [here](https://grocid.net/2015/01/28/attack-on-prime-length-qc-mdpc/).
-
-We can thwart this attack completely by picking the error weight odd with probability 1/2:
+The theory is described in more detail [here](https://grocid.net/2015/01/28/attack-on-prime-length-qc-mdpc/). There is an easy counter-measure; we can thwart this attack completely by picking the error weight odd with probability 1/2:
 
 ```
 1. Flip a balanced coin.
@@ -97,9 +95,9 @@ We can thwart this attack completely by picking the error weight odd with probab
 
 ###Squaring/subcode attacks
 
-Squaring attacks exploit that (the now deprecated) p = 4800 = 2⁶ × 75. By squaring the polynomial, the vector space decreases in size by a factor 2 (which can be done six times). It also causes collisions in the error vector, making it to decrease in weight. This allows an attacker to go quite far below 80-bit security. See [this paper](http://link.springer.com/article/10.1007/s10623-015-0099-x).
+Squaring attacks exploit that (the now deprecated) p = 4800 = 2⁶ × 75. By squaring the polynomial, the vector space decreases in size by a factor 2 (which can be done six times). It may also lead to collisions in the error vector, causing a decrease in error weight. This allows an attacker to go quite far below 80-bit security. See [this paper](http://link.springer.com/article/10.1007/s10623-015-0099-x).
 
-This attack is mitigated by picking a prime block length p. In the example above, p = 4801.
+This attack can be mitigated by picking a prime block length p. In the example above, p = 4801.
 
 #Academic papers
 [MDPC-McEliece: New McEliece Variants from Moderate Density Parity-Check Codes](https://eprint.iacr.org/2012/409.pdf)
