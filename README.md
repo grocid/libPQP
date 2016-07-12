@@ -14,10 +14,10 @@ Below are given the proposed parameters for rate R = 1/2.
 | Public-key size | Private-key size |  Rate          | Error weight  | Bit security |
 | ---------------:|-----------------:| --------------:|--------------:|-------------:|
 |      4801       | 9602             |     1/2        |     84        |   80         |
-|      9857       | 19714            |     1/2        |     134       |    128        |
+|      9857       | 19714            |     1/2        |     134       |    128       |
 |       32771     | 65542            |     1/2        |     264       |   256        |
  
-Since the encrypted token is a codeword of length 9602, we add approximately 1200 bytes of data to the ciphertext. Apart from this, a 32-byte MAC is included. This inflates a (padded) message of size M to size 1232 + M.
+Since the encrypted token is a codeword of length 9602 (for 80-bit security), we add approximately 1200 bytes of data to the ciphertext. Apart from this, a 32-byte MAC is included. This inflates a (padded) message of size M to size 1232 + M. For higher security levels, the inflation will be larger -- but still constant.
 
 # High-level description of the desired final result
 
