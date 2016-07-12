@@ -1,6 +1,12 @@
 # encrypt.life-python
 A simplistic prototype of encrypt.life in python. Focus has been on the QC-MDPC part, not the protocol. You may find vulnerabilities in the current implementation. Also, because of the numpy FFT, prime power is not used.
 
+| Public-key size| Private-key size |  Rate         | Error weight  | Bit security |
+| ---------------|:-------------:| -------------:|-------------:|-------------:|
+| 4801           | 9602          |     1/2       |     84        |   80         |
+| 9857           | 19714         |     1/2       |      134       |   128        |
+| 32771          | 65542          |     1/2       |     264       |   256        |
+
 # High-level description of the desired final result
 
 ##The sender side
@@ -52,7 +58,7 @@ We can thwart this attack completely by picking the error weight odd with probab
 
 Squaring attacks exploit that (the now deprecated) p = 4800 = 2⁶ × 75. By squaring the polynomial, the vector space decreases in size by a factor 2 (which can be done six times). It also causes collisions in the error vector, making it to decrease in weight. This allows an attacker to go quite far below 80-bit security. See [this paper](http://link.springer.com/article/10.1007/s10623-015-0099-x).
 
-This attack is mitigated by picking a prime block length p.
+This attack is mitigated by picking a prime block length p. In the example above, p = 4801.
 
 ##The receiver end
 ![protocol receiver](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/receiver.png)
