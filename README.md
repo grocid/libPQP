@@ -34,14 +34,14 @@ In this section, we will briefly described the protocol. Much like a Fujisaki-Ok
 5. The ciphertext is then the concatenation of the encrypted token and encrypted message + MAC.
 ```
 
-The ciphertext can now be distributed to Alice, using arbitrary means of communication.
+The ciphertext can now be distributed to Alice, using arbitrary means of communication. Below is a graphical interpretation of the above steps.
 
 
 ![protocol sender](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/sender.png)
 
 ###The receiver end
 
-Now Alice wants to decrypt the message sent by Bob.
+Now Alice wants to decrypt the message sent by Bob. She performs the following steps in order to do so:
 
 ```
 1. Alice decrypted the encrypted token using her private key privkey. In the decryption, the error vector is determined.
@@ -50,6 +50,8 @@ Now Alice wants to decrypt the message sent by Bob.
 4. The MAC of the message and error vector is verified using the key k₂ derived from the token.
 5. If the verification returns True, Alice accepts the message. Otherwise she rejects it.
 ```
+
+This completes the outline of the protocol. Below is a graphical interpretation of the above steps.
 
 ![protocol receiver](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/receiver.png)
 
