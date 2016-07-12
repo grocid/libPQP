@@ -15,3 +15,6 @@ A simplistic prototype of encrypt.life in python. Focus has been on the QC-MDPC 
 [Lightweight Code-based Cryptography: QC-MDPC McEliece Encryption on Reconfigurable Devices](https://www.date-conference.com/files/proceedings/2014/pdffiles/03.3_1.pdf)
 
 [Squaring attacks on McEliece public-key cryptosystems using quasi-cyclic codes of even dimension](http://link.springer.com/article/10.1007/s10623-015-0099-x)
+
+#Acknowledgements
+Miroslav Kratchovil (creator of [codecrypt](https://github.com/exaexa/codecrypt)) for pointing out a weakness in the protocol.
