@@ -4,6 +4,23 @@ A simplistic prototype of encrypt.life in python. Focus has been on the QC-MDPC 
 # High-level description of the desired final result
 
 ##The sender side
+The protocol is based on Fujisaki-Okamoto
+
+###Possibile vulnerabilities
+The protocol can be designed using normal McEliece or Niederreiter. In case of McEliece, the error vector should be part of the authentication (for instance, generate MAC using a concatenation of message and error vector). Such a measure will mitigate the usual decryption oracle attack, described below.
+
+```
+1. Intercept an encrypted message.
+2. Pick a random bit the ciphertext.
+3. Flip it. If decryption fails, this was not an error position.
+4. Repeat until all error positions have been unraveled.
+```
+
+Obviously, there is an implicit assumption that the receiver will either reject any error larger than T or the decoder will fail (which is rarely the case).
+
+If the protocol instead is designed using the Niederreiter model, the error vector will be/encode the token. In this case, there is no need to authenticate the error vector, since any flipped bit in the cipher text will cause the receiver to deocde a different token, hence breaking the decryption oracle.
+
+
 ![protocol sender](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/sender.png)
 
 ##The receiver end
