@@ -7,63 +7,68 @@ from arithmetic import *
 from private_key import *
 from qcmdpc import *
 
-from distinguisher import *
+class Protocol:
+    
+    def __init__(self):
+        self.priv_key = Privatekey()
+        self.receiver_pkc_cipher = McEliece()
+        self.receiver_pkc_cipher.set_private_key(self.priv_key)
 
-priv_key = Privatekey()
-receiver_pkc_cipher = McEliece()
-receiver_pkc_cipher.set_private_key(priv_key)
+        # compute public key
+        self.pub_key = self.receiver_pkc_cipher.get_public_key()
 
-# compute public key
-pub_key = receiver_pkc_cipher.get_public_key()
+        self.sender_pkc_cipher = McEliece()
 
-sender_pkc_cipher = McEliece()
+        self.saltA = b'this is just a salt'
+        self.saltB = b'this is another a salt'
+        self.ivSalt = b'third salt'
+    
+    def encrypt_message(self, message):
+        # generate random data
+        randomized = get_vector(self.pub_key.block_length, 1600)
+        token = to_bin(randomized, self.pub_key.block_length / 8)
+        keyA = sha256(str(token) + self.saltA).digest() # just some conversion
+        keyB = sha256(str(token) + self.saltB).digest()
 
-saltA = b'this is just a salt'
-saltB = b'this is another a salt'
-ivSalt = b'third salt'
+        sender_iv = sha512(str(token) + self.ivSalt).digest()[0:16]
+        sender_symmetric = AES.new(keyA, AES.MODE_CBC, sender_iv)
+
+        mac = sha256(message + str(token)).digest() # yeah, this is not a 'real' HMAC but...
+
+        c_0, c_1 = self.sender_pkc_cipher.encrypt(self.pub_key, randomized)
+
+        # pack the data into ciphertext. 
+        # obviously, this must be done in a different manner for end result.
+        ciphertext = c_0, c_1, \
+                     sender_symmetric.encrypt(message), mac
+        return ciphertext
+    
+    def decrypt_message(self, ciphertext):
+        rc_0, rc_1, symmetric_stream, mac = ciphertext
+
+        decrypted_token = to_bin(self.receiver_pkc_cipher.decrypt(rc_0, rc_1), self.priv_key.block_length / 8)
+        decrypted_keyA = sha256(str(decrypted_token) + self.saltA).digest() # just some conversion
+        decrypted_keyB = sha256(str(decrypted_token) + self.saltB).digest()
+
+        decrypted_iv = sha512(str(decrypted_token) + self.ivSalt).digest()[0:16]
+        receiver_symmetric = AES.new(decrypted_keyA, AES.MODE_CBC, decrypted_iv)
+        decrypted_message = receiver_symmetric.decrypt(symmetric_stream)
+
+        decrypted_mac = sha256(decrypted_message + str(decrypted_token)).digest()
+
+        print "MESSAGE:       ", decrypted_message
+        print "HMAC verified: ", mac == decrypted_mac
+
+
 message = b'this is a really secret message that is padded with some random.'
 
-############################################################
-
-# SENDER SIDE
-
-# generate random messge
-tag = get_vector(pub_key.block_length, 1600)
-secret = to_bin(tag, pub_key.block_length / 8)
-keyA = sha256(str(secret) + saltA).digest() # just some conversion
-keyB = sha256(str(secret) + saltB).digest()
-
-sender_iv = sha512(str(secret) + ivSalt).digest()[0:16]
-sender_symmetric = AES.new(keyA, AES.MODE_CBC, sender_iv)
-
-mac = sha256(message + str(secret)).digest() # yeah, this is not a 'real' HMAC but...
-
-c_0, c_1 = sender_pkc_cipher.encrypt(pub_key, tag)
-
-# pack the data into ciphertext. 
-# obviously, this must be done in a different manner for end result.
-ciphertext = c_0, c_1, \
-             sender_symmetric.encrypt(message), mac
+protocol_test = Protocol()
+ciphertext = protocol_test.encrypt_message(message)
+protocol_test.decrypt_message(ciphertext)
 
 ############################################################
 
-# RECEIVER END
-
-rc_0, rc_1, symmetric_stream, mac = ciphertext
-
-decrypted_secret = to_bin(receiver_pkc_cipher.decrypt(rc_0, rc_1), priv_key.block_length / 8)
-decrypted_keyA = sha256(str(decrypted_secret) + saltA).digest() # just some conversion
-decrypted_keyB = sha256(str(decrypted_secret) + saltB).digest()
-
-decrypted_iv = sha512(str(decrypted_secret) + ivSalt).digest()[0:16]
-decrypted_symmetric = AES.new(decrypted_keyA, AES.MODE_CBC, decrypted_iv)
-
-decrypted_mac = sha256(message + str(decrypted_secret)).digest()
-
-print "MESSAGE:       ", decrypted_symmetric.decrypt(symmetric_stream)
-print "HMAC verified: ", mac == decrypted_mac
-
-############################################################
+#from distinguisher import *
 
 # Distinguisher susceptibility
 # https://grocid.net/2015/01/28/attack-on-prime-length-qc-mdpc/

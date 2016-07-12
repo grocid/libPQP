@@ -1,7 +1,13 @@
 # encrypt.life-python
 This is a simplistic prototype of [encrypt.life](encrypt.life) in Python. It is not production ready and should not be used in a real-life context. 
 
-In this prototype, the focus has mainly been on the QC-MDPC part, not the actual protocol. You may find vulnerabilities in the current implementation. Also, because of the FFT implementation is Numpy, prime-power block length is not used. See below for known vulnerabilities.
+In this prototype, the focus has mainly been on making the QC-MDPC part efficient and not the actual protocol. Hence, you may find vulnerabilities in the current implementation of the protocol. Also, the primitives used in the code are not the ones mentioned below. This prototype uses:
+
+* AES-256(m, k) as symmetric cipher,
+* SHA-256(token + salt) as PBKDF2
+* A trucated SHA-512
+
+Also, because of the FFT implementation is Numpy, prime-power block length is not used. See below for known vulnerabilities.
 
 Below are given the proposed parameters for rate R = 1/2.
 
@@ -9,15 +15,15 @@ Below are given the proposed parameters for rate R = 1/2.
 | ---------------:|----------------:| --------------:|--------------:|-------------:|
 |      4801            | 9602             |     1/2       |     84        |   80         |
 |      9857            | 19714            |     1/2       |      134      |   128        |
-|       32771           | 65542            |     1/2       |     264       |   256        |
+|       32771          | 65542            |     1/2       |     264       |   256        |
+
+These are 
 
 # High-level description of the desired final result
 
-##The sender side
+###The sender side
 
-In this section, we will briefly described the protocol.
-
-Assume that Bob wants to send Alice a message. Denote Alice's keypair (pubkey, privkey). Bob takes the following steps: 
+In this section, we will briefly described the protocol. Much like a Fujisaki-Okamoto transform, it contains both an asymmetric part and a symmetric one. Consider the following scenario. Assume that Bob wants to send Alice a message. Denote Alice's keypair (pubkey, privkey). Bob takes the following steps: 
 
 ```
 1. Bob picks a random token T.
@@ -28,10 +34,12 @@ Assume that Bob wants to send Alice a message. Denote Alice's keypair (pubkey, p
 5. The ciphertext is then the concatenation of the encrypted token and encrypted message + MAC.
 ```
 
+The ciphertext can now be distributed to Alice, using arbitrary means of communication.
+
 
 ![protocol sender](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/sender.png)
 
-##The receiver end
+###The receiver end
 
 Now Alice wants to decrypt the message sent by Bob.
 
