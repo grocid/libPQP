@@ -12,10 +12,10 @@ Speed-ups in the decoding use the fast fourier transform (FFT) to achieve O(n lo
 Below are given the proposed parameters for rate R = 1/2.
 
 | Public-key size | Private-key size |  Rate         | Error weight  | Bit security |
-| ---------------:|----------------:| --------------:|--------------:|-------------:|
-|      4801            | 9602             |     1/2       |     84        |   80         |
-|      9857            | 19714            |     1/2       |      134      |   128        |
-|       32771          | 65542            |     1/2       |     264       |   256        |
+| ---------------:|-----------------:| --------------:|--------------:|-------------:|
+|      4801       | 9602             |     1/2       |     84        |   80         |
+|      9857       | 19714            |     1/2       |     134      |    128        |
+|       32771     | 65542            |     1/2       |     264       |   256        |
 
 Since the encrypted token is a codeword of length 9602, we add approximately 1200 bytes of data to the ciphertext. Apart from this, a 32-byte MAC is included. This inflates a (padded) message of size M to size 1232 + M.
 
@@ -23,7 +23,7 @@ Since the encrypted token is a codeword of length 9602, we add approximately 120
 
 ###The sender side
 
-In this section, we will briefly described the protocol. Much like a Fujisaki-Okamoto transform, it contains both an asymmetric part and a symmetric one. Consider the following scenario. Assume that Bob wants to send Alice a message. Denote Alice's keypair (pubkey, privkey). Bob takes the following steps: 
+In this section, we will briefly describe the protocol. Much like a Fujisaki-Okamoto transform, it contains both an asymmetric part and a symmetric one. Consider the following scenario. Assume that Bob wants to send Alice a message. Denote Alice's keypair (pubkey, privkey). Bob takes the following steps: 
 
 ```
 1. Bob picks a random token T.
