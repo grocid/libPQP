@@ -7,7 +7,7 @@ In this prototype, the focus has mainly been on making the QC-MDPC part efficien
 * SHA-256(token + salt) as PBKDF2,
 * A truncated SHA-512(token + salt) for iv.
 
-Speed-ups in the decoding use the fast fourier transform (FFT) to achieve O(n log n) complexity in modular polynomial multiplications, instead of O(n²). Because of that the FFT implementation in Numpy is restricted to certain lengths (multiples of powers of 2), prime-power block length is not used. See below for known vulnerabilities.
+Speed-ups in the decoding use the fast fourier transform (FFT) to achieve O(n log n) complexity in modular polynomial multiplications, instead of O(n²). Because of that the FFT implementation in Numpy is restricted to certain lengths (multiples of powers of 2), prime-power block length is not used (of course, in the final product prime power will be used). See below for known vulnerabilities.
 
 Below are given the proposed parameters for rate R = 1/2.
 
