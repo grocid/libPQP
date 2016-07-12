@@ -69,7 +69,7 @@ The protocol can be designed using normal McEliece or Niederreiter. In case of M
 4. Repeat until all error positions have been unraveled.
 ```
 
-Obviously, there is an implicit assumption that the receiver will either reject any error larger than T or the decoder will fail (which is rarely the case).
+Obviously, there is an implicit assumption that the receiver will either reject any error larger than T or the decoder will fail (which rarely is the case).
 
 If the protocol instead is designed using the Niederreiter model, the error vector will be/encode the token. In this case, there is no need to authenticate the error vector. Since any flipped bit in the ciphertext will cause the receiver to decode a different token, it will break the decryption oracle.
 
