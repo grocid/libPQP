@@ -39,7 +39,7 @@ In this section, we will briefly describe the protocol. Much like a Fujisaki-Oka
 The ciphertext can now be distributed to Alice, using arbitrary means of communication. Below is a graphical interpretation of the above steps.
 
 
-![protocol sender](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/sender.png =400x)
+![protocol sender](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/sender.png)
 
 ###The receiver end
 
@@ -55,7 +55,7 @@ Now Alice wants to decrypt the message sent by Bob. She performs the following s
 
 This completes the outline of the protocol. Below is a graphical interpretation of the above steps.
 
-![protocol receiver](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/receiver.png =400x)
+![protocol receiver](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/receiver.png)
 
 ##Possibile vulnerabilities
 
@@ -79,7 +79,7 @@ This is a slight variation of the above. Instead of observing decryption errors,
 
 The decoding we use is probabilistic and susceptible to timing attacks. However, in the PGP-like setting we do not worry too much about this. Below is a graph of timings for 300 decryptions:
 
-![protocol receiver](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/timings.png =400x)
+![protocol receiver](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/timings.png)
 
 ###Distinguishing attacks
 
