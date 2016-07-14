@@ -25,7 +25,7 @@ class McEliece:
     def encrypt(self, pub_key, m):
         v = (mul_poly(pub_key.G, m) + get_vector(pub_key.block_length, pub_key.block_error)) % 2
         u = (m + get_vector(pub_key.block_length, pub_key.block_error)) % 2
-        return u,v
+        return u, v
 
     def syndrome(self, c_0, c_1):
         return (mul_poly(self.H_0, c_0) + mul_poly(self.H_1, c_1)) % 2

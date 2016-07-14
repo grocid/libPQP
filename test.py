@@ -6,11 +6,13 @@ from hashlib import sha512, sha256
 from arithmetic import *
 from private_key import *
 from qcmdpc import *
+from keygen import *
 
 class Protocol:
     
     def __init__(self):
-        self.priv_key = Privatekey()
+        keygen = Keygen()
+        self.priv_key = keygen.generate()
         self.receiver_pkc_cipher = McEliece()
         self.receiver_pkc_cipher.set_private_key(self.priv_key)
 
@@ -56,16 +58,19 @@ class Protocol:
 
         decrypted_mac = sha256(decrypted_message + str(decrypted_token)).digest()
 
-        print "MESSAGE:       ", decrypted_message
-        print "HMAC verified: ", mac == decrypted_mac
+        return decrypted_message, mac == decrypted_mac
 
 
 message = b'this is a really secret message that is padded with some random.'
 
 protocol_test = Protocol()
 ciphertext = protocol_test.encrypt_message(message)
-protocol_test.decrypt_message(ciphertext)
+message, verified = protocol_test.decrypt_message(ciphertext)
 
+if verified:
+    print 'Message: ', message
+else:
+    print 'Something has been tampered with!'
 ############################################################
 
 #from distinguisher import *
@@ -75,6 +80,6 @@ protocol_test.decrypt_message(ciphertext)
 
 #distinguisher = Distinguisher(priv_key.block_error, priv_key.block_weight)
 #if distinguisher.distinguish(c_0) and distinguisher.distinguish(c_1):
-#    print "Both blocks distinguished"
+#    print 'Both blocks distinguished'
 
 
