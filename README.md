@@ -9,7 +9,7 @@ In this prototype, the focus has mainly been on making the QC-MDPC part efficien
 
 The final product will use Salsa-20 as symmetric-cipher primitive and Poly1305 for authentication purposes. Moreover, PBKDF2 or similar will be used for symmetric-key generation.
 
-Speed-ups in the decoding use the fast fourier transform (FFT) to achieve O(n log n) complexity in modular polynomial multiplications, instead of O(n²). Because the FFT implementation in Numpy is restricted to certain lengths (multiples of powers of 2), we use [pyfftw](https://pypi.python.org/pypi/pyFFTW) which is a wrapper for FFTW3. FFTW3 implements Winograd's FFT algoritm and supports prime-length blocks. See below for known vulnerabilities.
+Speed-ups in the decoding use the fast fourier transform (FFT) to achieve O(n log n) complexity in modular polynomial multiplications, instead of O(n²). Because the FFT implementation in Numpy is restricted to certain lengths (multiples of powers of 2), we use [pyfftw](https://pypi.python.org/pypi/pyFFTW) which is a wrapper for [FFTW3](https://github.com/FFTW/fftw3). FFTW3 implements Winograd's FFT algoritm and supports prime-length blocks. See below for known vulnerabilities.
 
 Below are given the proposed parameters for rate R = 1/2.
 

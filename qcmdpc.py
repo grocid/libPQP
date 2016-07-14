@@ -1,18 +1,15 @@
 from arithmetic import *
 from copy import copy
 
-class PublicKey:
-    def set_params(self, G, block_error):
-        self.G = G
-        self.block_length = len(G)
-        self.block_error = block_error
-
 class McEliece:
     
     def set_private_key(self, priv_key):
+        
         self.H_0 = priv_key.H_0
         self.H_1 = priv_key.H_1
+        
         self.G = mul_poly(priv_key.H_0, priv_key.H_1inv) # compute public key
+        
         self.block_length = priv_key.block_length
         self.block_error = priv_key.block_error
         self.block_weight = priv_key.block_weight
