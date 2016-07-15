@@ -136,6 +136,52 @@ unpFXE9k6DXEMO1+Y1RcvRovXTK+CDXK2ALYdMW7O2GrPLyob3rEtIShmsDVYTJDM6eOnsRhlhyO
 -----END PQP PRIVATE KEY-----
 ```
  
+ The messages are structured in a similar way. The encrypted token is stored in C0 and C1 and the symmetric ciphertext and MAC are stored as OctectStings.
+ 
+ ```
+ class ASN1Ciphertext(pyasn1.type.univ.Sequence):
+     componentType = namedtype.NamedTypes(
+         namedtype.NamedType('C0',    pyasn1.type.univ.BitString()),
+         namedtype.NamedType('C1',    pyasn1.type.univ.BitString()),
+         namedtype.NamedType('Sym',   pyasn1.type.univ.OctetString()),
+         namedtype.NamedType('MAC',   pyasn1.type.univ.OctetString()),
+     )
+ ```
+We encrypted the message 
+```
+this is a really secret message that is padded with some random.'
+```
+and put it into the ASN.1 format. Below is the ciphertext.
+ 
+ ```
+ -----BEGIN PQP MESSAGE-----
+ MIIFIAOCAloHaaHbjcotpz7pyi2L4CRsg/gGpu3kSexB9w3a0Uiq8UmUGOe/3sm4/TsmbVA0xTQ2
+ DuEg99v/L2Y+l6/xNsqKRC+ypDsWFgsfBDe5kwy5zBH0/6jAebrhz9fReIQlFXPR7QXLRgr+tLPM
+ wd8eHsPAbiS6FD8hE5VRLMUg++EPCMgoSthHbUb5sGeidM/p+pLgIEj5ZSpbEMDCJJ9+2O0Ir2um
+ roQB008xPf066aNPXkp/ADn/PxyKDbSwhybkLO3T6inQYAjA6xuq/LSkbq0oLu/c8urmDaNYiDOj
+ BOjRMtYgm+/UKmkUhDSsgSGaENbYhrjS4y8KxZ/bBrObvX78FXGf+fuF4CoPr9S9X7YDAhn49E2i
+ 1LrjNUY6YxVb5YFctyQqThgHUKYworssdQFY95lafEaSe/xri3OIWJLnNmEQqLsCUHjqAaJOrEHV
+ 6dKTfdHLiOw1AL4zyBCcwBx5ixRstbAq+PyffimX9G/DNrWO2G9B0aJE4pXF6i4o12BNM7nA0Ejc
+ AGYOGGnc5f7YM82YMfSVrMR7jkI4DchCRxPyfHpMy/BiIW/XzKSRv1aMOc+16YtCdL2AX9PCtc+x
+ ob6XHcr87VQrDMPBmbbs0SFAB2H6hNT8YighnX9p8otyIzk8JCt76TZg1+0ax7r88wqDN4I8sOVa
+ Opj/c6C50o4oOrthoRAZGatOBLLP4y6KbktwUjeuarAGCJ5429BECb8COdhLnkwUg6hZ6//rQGbI
+ hGQyVE7xTFmDrSL8UT2z5KEt02jEm3tXkAkOx/USKspqa/OVBMZIAAOCAloH2TJ1NBiaN4TheYe3
+ jA6oIwXTCLYK3t5VFqq8RpW7iU7rCIIIDX0/t86SZUc5OGVN9F9kkGJgefU7dPAK18fgEglrcLtO
+ VNyfECs9OA0pl7NfPdof2DJRvZMgs492oSeo/b3xTG/JZDY2swCofB1q5cca/IergxDq1cGhEemG
+ fuVzBZcCFR9YsLiS4un89jI/QnMRmTdo6MtR+FCWr7c5pcOiEYwTLX5+l3KB7AydE5OTIaXgdhLI
+ ut0wO4fMrF08FN9Skn+0bfKz1gACbANce39eOnnMtH8Xo3TQ+L2DJQ7/tycp2vjyD+7YXI9YIHWp
+ ds8VZkAm9rwCzop14ObhSCgaNU1ERg0kaA8WaQPPV33uLk7NyCF/XpW6T8baSUIs1Lk1Vw3Y2Tvg
+ 9cBICQYhjSnBcwHfIVD4N3SZXXZ9JQ5o18x7RY9XkdKFlIlgceefzY3llxbD+BucJlCREYHHpdQD
+ 03fUXUcEJovRisiavp8aD9ERZibliZq8TPIGhP8mhI8Lf2PaZdtSj810Av1iCDOdD3ncrVLH/wYk
+ +xhGE5D8ipLj7kM1eX1eimr9N7uQCPyJRz+NM/heKPEusMojskWtt4jXK1UgutfgI7l1chMVcaOh
+ gosuhtR+NJHfEnfUg/xIq9DpiaXHDw5VcrxmbJrqwx2Rd4V55pyYy4PGrpuzSxBh9BLqWFM5DwBq
+ P3J8329KNdMLlYUE9Puz/MQZtwjuKMfYK7KRK6Yr3pyhUzQCEEniuzn+0LID8poW6I9O463rP7cU
+ s6TqiVGZ3pGN4bNgd6KmBG2jAARAZN9cjlY/OZUvRYxrkJPCYd3mob/8FHjIZUp+HI+KhEuc9TlF
+ NvocCfAZoAxs0v2f5tE2NSkrFhaLtl+3jJ//mAQgvHqfnrvWF6yDWflK9EijPkNskOXh5qX7UZHw
+ Mh6VrwU=
+ -----END PQP MESSAGE-----
+  ```
+ 
 ##Possible vulnerabilities
 
 ###Decryption oracle
