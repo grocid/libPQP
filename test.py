@@ -3,12 +3,14 @@ import numpy as np
 from Crypto.Cipher import AES
 from hashlib import sha512, sha256
 
-from arithmetic import *
-from private_key import *
-from public_key import *
-from qcmdpc import *
-from keygen import *
-from keyio import *
+from operations.arithmetic import *
+from operations.keyio import *
+
+from crypto.private_key import *
+from crypto.public_key import *
+from crypto.qcmdpc import *
+from crypto.keygen import *
+
 
 class Protocol:
     
@@ -104,7 +106,7 @@ else:
 
 ############################################################
 
-#from distinguisher import *
+#from attacks.distinguisher import *
 
 # Distinguisher susceptibility
 # https://grocid.net/2015/01/28/attack-on-prime-length-qc-mdpc/
