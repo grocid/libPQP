@@ -87,7 +87,7 @@ ciphertext = protocol_test.encrypt_message(message)
 
 # receive encoded ciphertext and interpret it
 io = IO()
-encoded_ciphertext= io.get_der_ciphertext(ciphertext[0], ciphertext[1], ciphertext[2])
+encoded_ciphertext = io.get_der_ciphertext(ciphertext[0], ciphertext[1], ciphertext[2])
 ciphertext = io.extract_der_ciphertext(encoded_ciphertext)
 
 # decrypt ciphertext / simulate receiver
