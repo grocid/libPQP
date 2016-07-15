@@ -8,6 +8,7 @@ from private_key import *
 from public_key import *
 from qcmdpc import *
 from keygen import *
+from keyio import *
 
 class Protocol:
     
@@ -79,6 +80,12 @@ protocol_test = Protocol()
 
 # encrypt and compte ciphertext / simulate sender
 ciphertext = protocol_test.encrypt_message(message)
+
+io = IO()
+encoded_ciphertext= io.get_der_ciphertext(ciphertext[0], ciphertext[1], ciphertext[2], ciphertext[3])
+print encoded_ciphertext
+ciphertext = io.extract_der_ciphertext(encoded_ciphertext)
+print ciphertext
 
 # decrypt ciphertext / simulate receiver
 message, verified = protocol_test.decrypt_message(ciphertext)
