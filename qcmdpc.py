@@ -1,10 +1,13 @@
 from arithmetic import *
+from randomgen import *
 from copy import copy
 
 class McEliece:
     
+    def __init__(self):
+        self.randgen = RandomGenerator()
+    
     def set_private_key(self, priv_key):
-        
         self.H_0 = priv_key.H_0
         self.H_1 = priv_key.H_1
         
@@ -20,8 +23,10 @@ class McEliece:
         return pub_key
     
     def encrypt(self, pub_key, m):
-        v = (mul_poly(pub_key.G, m) + get_vector(pub_key.block_length, pub_key.block_error)) % 2
-        u = (m + get_vector(pub_key.block_length, pub_key.block_error)) % 2
+        v = (mul_poly(pub_key.G, m) + self.randgen.get_random_weight_vector( \
+            pub_key.block_length, pub_key.block_error)) % 2
+        u = (m + self.randgen.get_random_weight_vector(pub_key.block_length, \
+            pub_key.block_error)) % 2
         return u, v
 
     def syndrome(self, c_0, c_1):

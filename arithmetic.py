@@ -1,7 +1,7 @@
 import numpy as np
 import pyfftw
+
 from binascii import hexlify
-from private_key import *
 from copy import copy
 
 def to_bin(vec, length):
@@ -17,11 +17,6 @@ def to_int(vec):
 
 def from_int(num):
     return np.array([int(x) for x in bin(num)[2:]][::-1])
-
-def get_vector(p, weight):
-    coefficients = np.array([0] * (p - weight) + [1] * weight)
-    np.random.shuffle(coefficients)
-    return coefficients
 
 def div_poly(x, y):
     D = np.fft.rfft(np.array(list(y) + [0] * (len(x) - len(y))))

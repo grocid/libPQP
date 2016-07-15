@@ -1,9 +1,10 @@
 import numpy as np
 from base64 import b64encode, decodestring
+
 from arithmetic import *
 from private_key import *
 from public_key import *
-from struct import *
+from randomgen import *
 
 class Keygen:
     
@@ -13,6 +14,7 @@ class Keygen:
         self.block_error = 42
         
         self.rate = [1,2]
+        self.randgen = RandomGenerator()
         
     def generate(self):
         # create keypair
@@ -20,8 +22,8 @@ class Keygen:
         pub_key = PublicKey()
         
         # set private-key parameters
-        priv_key.H_0 = get_vector(self.block_length, self.block_weight)
-        priv_key.H_1 = get_vector(self.block_length, self.block_weight)
+        priv_key.H_0 = self.randgen.get_random_weight_vector(self.block_length, self.block_weight)
+        priv_key.H_1 = self.randgen.get_random_weight_vector(self.block_length, self.block_weight)
         priv_key.H_1inv = exp_poly(priv_key.H_1, 2**1200 - 2)
         
         priv_key.block_length = self.block_length

@@ -13,12 +13,15 @@ class Protocol:
     
     def __init__(self):
         keygen = Keygen()
+        
         self.priv_key, self.pub_key = keygen.generate()
         self.receiver_pkc_cipher = McEliece()
         self.receiver_pkc_cipher.set_private_key(self.priv_key)
         
         # this is out asymmetric-cipher object
         self.sender_pkc_cipher = McEliece()
+        
+        self.randgen = RandomGenerator()
         
         # just some random salts
         self.saltA = b'this is just a salt'
@@ -27,7 +30,7 @@ class Protocol:
     
     def encrypt_message(self, message):
         # generate random data
-        randomized = get_vector(self.pub_key.block_length, 1600)
+        randomized = self.randgen.get_random_vector(self.pub_key.block_length)
         token = to_bin(randomized, self.pub_key.block_length / 8)
         
         # derive keys
