@@ -38,7 +38,7 @@ Suppose Bob wants to send Alice a message m. To encrypt, he does the following:
 
 ```
 1. Retrieves Alice's public key G'.
-2. Compute ciphertext c = G × 'm + e and send it to Alice
+2. Compute ciphertext c = m × G' + e and send it to Alice
 ```
 
 Note that these operations require basically no work at all, so encryption is very fast. Now Alice receives the ciphertext c.
