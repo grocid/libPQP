@@ -24,6 +24,8 @@ class McEliece:
         return pub_key
     
     def encrypt(self, pub_key, m):
+        print pub_key.block_error + self.randgen.flip_coin()
+        print pub_key.block_error + self.randgen.flip_coin()
         v = (mul_poly(pub_key.G, m) + self.randgen.get_random_weight_vector( \
             pub_key.block_length, pub_key.block_error + self.randgen.flip_coin())) % 2
         u = (m + self.randgen.get_random_weight_vector(pub_key.block_length, \
@@ -58,7 +60,7 @@ class McEliece:
         while True:
             max_unsat = max(unsat_H0.max(), unsat_H1.max())
             
-            # if so, we are don
+            # if so, we are done decoding
             if max_unsat == 0: 
                 break
                 
