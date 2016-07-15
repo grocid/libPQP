@@ -30,7 +30,7 @@ To remedy the problem of quantum attacks, post-quantum cryptography was proposed
 
 ```
 1. Generate a linear code with generator matrix G (usually a Goppa code).
-2. Compute G' = S × G × P, where S is an inverible matrix and P a permutation matrix.
+2. Compute G' = S × G × P, where S is an invertible matrix and P a permutation matrix.
 3. Return keypair G, G'
 ```
 
