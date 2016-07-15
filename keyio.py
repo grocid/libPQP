@@ -24,7 +24,6 @@ class ASN1Ciphertext(pyasn1.type.univ.Sequence):
         namedtype.NamedType('C0',    pyasn1.type.univ.BitString()),
         namedtype.NamedType('C1',    pyasn1.type.univ.BitString()),
         namedtype.NamedType('Sym',   pyasn1.type.univ.OctetString()),
-        namedtype.NamedType('MAC',   pyasn1.type.univ.OctetString()),
     )
 
 class IO:
@@ -43,7 +42,7 @@ class IO:
         priv_key.block_length = len(priv_key.G)
         return priv_key
 
-    def get_der_priv_key(self, pub_key):
+    def get_der_priv_key(self, priv_key):
         template = '-----BEGIN PQP PRIVATE KEY-----\n{}-----END PQP PRIVATE KEY-----\n'
         
         der = ASN1PrivateKey()
@@ -70,13 +69,12 @@ class IO:
         data = base64.encodestring(encoder.encode(der))
         return template.format(data)
     
-    def get_der_ciphertext(self, c_0, c_1, symmetric_stream, mac):
+    def get_der_ciphertext(self, c_0, c_1, symmetric_stream):
         template = '-----BEGIN PQP MESSAGE-----\n{}-----END PQP MESSAGE-----\n'
         der = ASN1Ciphertext()
         der['C0'] =  self.to_bitstring(c_0)
         der['C1'] =  self.to_bitstring(c_1)
         der['Sym'] =  symmetric_stream
-        der['MAC'] = mac
         data = base64.encodestring(encoder.encode(der))
         return template.format(data)
     
@@ -86,6 +84,13 @@ class IO:
         der = decoder.decode(base64.decodestring(seq), asn1Spec=ASN1Ciphertext())[0]
         c_0 = np.array(list(der['C0']))
         c_1 = np.array(list(der['C1']))
-        symmetric_stream = der['Sym']
-        mac = der['MAC']
-        return c_0, c_1, symmetric_stream, mac
+        symmetric_stream = der['Sym'].asOctets()
+        return c_0, c_1, symmetric_stream
+
+
+
+#bask = IO()
+#encoded = bask.get_der_ciphertext([1],[0], '\x00')
+#print bask.extract_der_ciphertext(encoded)
+
+

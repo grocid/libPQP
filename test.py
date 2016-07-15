@@ -19,6 +19,10 @@ class Protocol:
         self.receiver_pkc_cipher = McEliece()
         self.receiver_pkc_cipher.set_private_key(self.priv_key)
         
+        io = IO()
+        print io.get_der_priv_key(self.priv_key)
+        print io.get_der_pub_key(self.pub_key)
+        
         # this is out asymmetric-cipher object
         self.sender_pkc_cipher = McEliece()
         
@@ -48,12 +52,11 @@ class Protocol:
 
         # pack the data into ciphertext. 
         # obviously, this must be done in a different manner for end result.
-        ciphertext = c_0, c_1, \
-                     sender_symmetric.encrypt(message), mac
+        ciphertext = c_0, c_1, sender_symmetric.encrypt(message + mac)
         return ciphertext
     
     def decrypt_message(self, ciphertext):
-        rc_0, rc_1, symmetric_stream, mac = ciphertext
+        rc_0, rc_1, symmetric_stream = ciphertext
         
         # decrypt necessary data
         decrypted_token = to_bin(self.receiver_pkc_cipher.decrypt(rc_0, rc_1), self.priv_key.block_length / 8)
@@ -68,9 +71,11 @@ class Protocol:
         # decrypt ciphertext and derive mac
         receiver_symmetric = AES.new(decrypted_keyA, AES.MODE_CBC, decrypted_iv)
         decrypted_message = receiver_symmetric.decrypt(symmetric_stream)
-        decrypted_mac = sha256(decrypted_message + str(decrypted_token)).digest()
+        decrypted_mac = decrypted_message[-32:]
+        decrypted_message = decrypted_message[:-32]
+        receiver_mac = sha256(decrypted_message + str(decrypted_token)).digest()
 
-        return decrypted_message, mac == decrypted_mac
+        return decrypted_message, receiver_mac == decrypted_mac
 
 
 message = b'this is a really secret message that is padded with some random.'
@@ -82,10 +87,12 @@ protocol_test = Protocol()
 ciphertext = protocol_test.encrypt_message(message)
 
 io = IO()
-encoded_ciphertext= io.get_der_ciphertext(ciphertext[0], ciphertext[1], ciphertext[2], ciphertext[3])
+encoded_ciphertext= io.get_der_ciphertext(ciphertext[0], ciphertext[1], ciphertext[2])
+
+
 print encoded_ciphertext
+
 ciphertext = io.extract_der_ciphertext(encoded_ciphertext)
-print ciphertext
 
 # decrypt ciphertext / simulate receiver
 message, verified = protocol_test.decrypt_message(ciphertext)
