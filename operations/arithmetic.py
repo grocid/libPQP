@@ -53,6 +53,8 @@ def exp_poly(x, n):
             x = square_sparse_poly(x)
             n = n / 2
         else:
+            # precision does not allow us to stay in FFT domain
+            # hence, interchanging ifft(fft).
             X = copy(fft_object(x))
             Y = copy(fft_object(y))
             y = np.round(fft_object_inv(X * Y).real).astype('int') % 2
