@@ -136,7 +136,7 @@ unpFXE9k6DXEMO1+Y1RcvRovXTK+CDXK2ALYdMW7O2GrPLyob3rEtIShmsDVYTJDM6eOnsRhlhyO
 -----END PQP PRIVATE KEY-----
 ```
  
-##Possibile vulnerabilities
+##Possible vulnerabilities
 
 ###Decryption oracle
 The protocol can be designed using normal McEliece or Niederreiter. In case of McEliece, the error vector should be part of the authentication (for instance, generate MAC using a concatenation of message and error vector). Such a measure will mitigate the usual decryption oracle attack, described below.
