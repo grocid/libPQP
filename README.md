@@ -1,4 +1,5 @@
 # encrypt.life-python (libpqp)
+
 This is a simplistic prototype of a post-quantum cryptography library in Python. It is not production ready and should not be used in a real-life context. 
 
 In this prototype, the focus has mainly been on making the QC-MDPC part efficient and not the actual protocol. Hence, you may find vulnerabilities in the current implementation of the protocol. Also, the primitives used in the code are not the ones mentioned below. This prototype uses:
@@ -20,6 +21,36 @@ Below are given the proposed parameters for rate R = 1/2.
 |       32771     | 65542            |     1/2        |     264       |   256        |
  
 Since the encrypted token is a codeword of length 9602 (for 80-bit security), we add approximately 1200 bytes of data to the ciphertext. Apart from this, a 32-byte MAC is included. This inflates a (padded) message of size M to size 1232 + M. For higher security levels, the inflation will be larger — but still constant.
+
+# What is post-quantum cryptograhpy?
+
+Today, most security assertions depend on primitives based on number theory. In principle, each of these primitives stand and fall on the problem of factoring integers. In the 1980's, a theoretical model of a computer that exploits certain quantum mechanical effects to achieve better complexity in certain classes of problems (BQP) was proposed. It so happens that the problem of factoring integers is contained in this class. Such a computer, called a quantum computer, can factor any integer N in time polynomial to the number of bits in N. This poses an actual problem for the security industry because RSA, ECC and DH, to name a few, can be broken efficiently. In turn, such a break causes the whole security architecture, upon which the secure internet is built, to collapse. Even symmetric primitives, such as AES, is subject quantum attacks. However, the impact is much less severe; the speed-up in attacks is only a square-root factor.
+
+To remedy the problem of quantum attacks, post-quantum cryptography was proposed. There has been many candidates, often based on so-called NP-complete problems. One such candidate is McEliece public-key cryptosystem, which is based on a hard problem called random linear decoding. Essentially, this problem boils do to decoding a linear code used in error-correction applications. We should point out that some linear codes with special properties are very easy to decode. McEliece PKC extends this idea by defining such a easily decodable linear code, which becomes the private key. Then, a scrambled version of the linear code is used as public key.
+
+```
+1. Generate a linear code with generator matrix G (usually a Goppa code).
+2. Compute G' = S × G × P, where S is an inverible matrix and P a permutation matrix.
+3. Return keypair G, G'
+```
+
+Suppose Bob wants to send Alice a message m. To encrypt, he does the following:
+
+```
+1. Retrieves Alice's public key G'.
+2. Compute ciphertext c = G × 'm + e and send it to Alice
+```
+
+Note that these operations require basically no work at all, so encryption is very fast. Now Alice receives the ciphertext c.
+
+```
+1. Alice obtains c. Knowing S, G and P, she computes u = c × inv(P) = m × (S × G) = (m × S) × G + e × inv(P).
+2. Using the generator matrix G (which defined an efficiently decodable code), she can decode m × S.
+3. Having c' = m × S, the message is formed by removing the S, i.e., c' × inv(S) = m × S × inv(S) = m.
+```
+
+The QC-MDPC McEliece is a bit different, but the principle is the same. Instead of using matrices, it operates on polynomials (or, equivalently, circular matrices). Here, the private key is two sparse polynomials H₀ and H₁, which can be used to perform efficient decoding. H₀ and H₁ form the private key. The public key is H₀ × inv(H₁), which is not sparse and (presumably) cannot be used for efficient decoding. Encryption and decryption is done is similar ways to the above.
+
 
 # High-level description
 
