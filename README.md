@@ -22,7 +22,7 @@ Below are given the proposed parameters for rate R = 1/2.
  
 Since the encrypted token is a codeword of length 9602 (for 80-bit security), we add approximately 1200 bytes of data to the ciphertext. Apart from this, a 32-byte MAC is included. This inflates a (padded) message of size M to size 1232 + M. For higher security levels, the inflation will be larger — but still constant.
 
-# What is post-quantum cryptograhpy?
+# What is post-quantum cryptography?
 
 Today, most security assertions depend on primitives based on number theory. In principle, all of these primitives stand and fall on the problem of factoring integers. In the 1980's, a theoretical model of a computer that exploits certain quantum mechanical effects to achieve better complexity in certain classes of problems (BQP) was proposed. It so happens that the problem of factoring integers is contained in this class. Such a computer, called a quantum computer, can factor any integer N in time polynomial to the number of bits in N. This poses an actual problem for the security industry because RSA, ECC and DH, to name a few, can be broken efficiently. In turn, such a break causes the whole security architecture, upon which the secure internet is built, to collapse. Even symmetric primitives, such as AES, is subject quantum attacks. However, the impact is much less severe; the speed-up in attacks is only a square-root factor.
 
