@@ -1,11 +1,12 @@
 from pyasn1.codec.der import encoder, decoder
+
 import pyasn1.type.univ
 import pyasn1.type.namedtype as namedtype
 import base64
 
-from keygen import *
-from private_key import *
-from public_key import *
+from crypto.keygen import *
+from crypto.private_key import *
+from crypto.public_key import *
 
 class ASN1PublicKey(pyasn1.type.univ.Sequence):
     componentType = namedtype.NamedTypes(

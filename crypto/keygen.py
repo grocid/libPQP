@@ -1,10 +1,10 @@
 import numpy as np
 from base64 import b64encode, decodestring
 
-from arithmetic import *
-from private_key import *
-from public_key import *
-from randomgen import *
+from operations.arithmetic import *
+from crypto.private_key import *
+from crypto.public_key import *
+from operations.randomgen import *
 
 class Keygen:
     

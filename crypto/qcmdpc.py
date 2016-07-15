@@ -1,5 +1,6 @@
-from arithmetic import *
-from randomgen import *
+from operations.arithmetic import *
+from operations.randomgen import *
+
 from copy import copy
 
 class McEliece:
@@ -33,11 +34,9 @@ class McEliece:
         return (mul_poly(self.H_0, c_0) + mul_poly(self.H_1, c_1)) % 2
     
     def decrypt(self, c_0, c_1):
-    
         synd = self.syndrome(c_0, c_1)
 
         # compute correlations with syndrome
-
         H0_ind = np.nonzero(self.H_0)[0]
         H1_ind = np.nonzero(self.H_1)[0]
 
@@ -58,20 +57,24 @@ class McEliece:
 
         while True:
             max_unsat = max(unsat_H0.max(), unsat_H1.max())
-    
+            
+            # if so, we are don
             if max_unsat == 0: 
                 break
-        
+                
+            # we have reach the upper bound on rounds
             if r >= rounds: 
                 raise ValueError('Decryption error')
                 break
             r += 1
-    
+            
+            # update threshold
             if max_unsat > delta: threshold = max_unsat - delta
     
             round_unsat_H0 = copy(unsat_H0)
             round_unsat_H1 = copy(unsat_H1)
-    
+            
+            # first block sweep
             for i in range(self.block_length):
                 if round_unsat_H0[i] <= threshold: continue
         
@@ -94,7 +97,8 @@ class McEliece:
                     synd[(i+j) % self.block_length] ^= 1
             
                 c_0[i] ^= 1
-
+            
+            # second block sweep
             for i in range(self.block_length):
                 if round_unsat_H1[i] <= threshold: continue
         
