@@ -4,6 +4,7 @@ from Crypto.Cipher import AES
 from hashlib import sha512, sha256
 
 from operations.arithmetic import *
+from operations.conversion import *
 from operations.keyio import *
 
 from crypto.private_key import *
@@ -38,7 +39,7 @@ class Protocol:
     def encrypt_message(self, message):
         # generate random data
         randomized = self.randgen.get_random_vector(self.pub_key.block_length)
-        token = to_bin(randomized, self.pub_key.block_length / 8)
+        token = to_bin(randomized, (self.pub_key.block_length + 1) / 8)
         
         # derive keys
         keyA = sha256(str(token) + self.saltA).digest() # just some conversion
