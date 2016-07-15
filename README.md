@@ -136,7 +136,7 @@ unpFXE9k6DXEMO1+Y1RcvRovXTK+CDXK2ALYdMW7O2GrPLyob3rEtIShmsDVYTJDM6eOnsRhlhyO
 -----END PQP PRIVATE KEY-----
 ```
  
- The messages are structured in a similar way. The encrypted token is stored in C0 and C1 and the symmetric ciphertext and MAC are stored as OctectStings.
+ The messages are structured in a similar way. The encrypted token (C₀, C₁) is stored in two separate Bitstrings and the symmetric ciphertext and MAC are stored as two OctetStrings.
  
  ```
  class ASN1Ciphertext(pyasn1.type.univ.Sequence):
