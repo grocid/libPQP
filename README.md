@@ -77,7 +77,7 @@ If the protocol instead is designed using the Niederreiter model, the error vect
 
 This is a slight variation of the above. Instead of observing decryption errors, we measure the timing. There has been some effort in making decoding run in constant time. See [this paper](http://www.win.tue.nl/~tchou/papers/qcbits.pdf).
 
-The decoding we use is probabilistic and susceptible to timing attacks. However, in the PGP-like setting we do not worry too much about this. Below is a graph of timings for 1000 decryptions using the same private key (σ = 0.0386, μ = 0.493):
+The decoding we use is probabilistic and susceptible to timing attacks. However, in the PGP-like setting we do not worry too much about this. Below is a graph of timings of my computer (Macbook Pro 15" Retina 2 GHz Intel Core i7) running 1000 decryptions using the same private key (σ = 0.0386, μ = 0.493):
 
 ![protocol receiver](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/timings.png)
 
