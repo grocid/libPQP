@@ -148,7 +148,7 @@ XAT/wwcIth3UVQoT5Y0lnXVUKnBF89PHUayLawWgxPiDx5EHhjsWqyB/G/VB2ZhFx6qnfE+qAA==
  ```
 We encrypted the message 
 ```
-this is a really secret message that is padded with some random.'
+this is a really secret message that is padded with some random.
 ```
 and put it into the ASN.1 format. Below is the ciphertext.
  
