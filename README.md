@@ -21,7 +21,7 @@ Below are given the proposed parameters for rate R = 1/2.
  
 Since the encrypted token is a codeword of length 9602 (for 80-bit security), we add approximately 1200 bytes of data to the ciphertext. Apart from this, a 32-byte MAC is included. This inflates a (padded) message of size M to size 1232 + M. For higher security levels, the inflation will be larger — but still constant.
 
-# High-level description of the desired final result
+# High-level description
 
 ###The sender side
 
