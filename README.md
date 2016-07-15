@@ -85,7 +85,7 @@ LTBW5ePqglxGjown9lZlmw2Rgpsl7o6wSG5lb/d+B6hTw8w6KIowsQywEyDuF45B7U6W5EE8kgS1
 -----END PQP PUBLIC-----
 ```
 
-The private key contains the two secret-key polynomials H₀ and H₁. Because inversion takes quite a while to perform, the inverse of H₁ is also contained in the private-key structure:
+The private key contains the two secret-key polynomials H₀ and H₁. Because inversion takes quite a while to perform, the inverse of H₁ is also contained in the private-key structure. This is not necessary, since inv(H₁) is only used when deriving the public key.
 
 
 ```
