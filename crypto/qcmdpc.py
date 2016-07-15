@@ -25,9 +25,9 @@ class McEliece:
     
     def encrypt(self, pub_key, m):
         v = (mul_poly(pub_key.G, m) + self.randgen.get_random_weight_vector( \
-            pub_key.block_length, pub_key.block_error)) % 2
+            pub_key.block_length, pub_key.block_error + self.randgen.flip_coin())) % 2
         u = (m + self.randgen.get_random_weight_vector(pub_key.block_length, \
-            pub_key.block_error)) % 2
+            pub_key.block_error + self.randgen.flip_coin())) % 2
         return u, v
 
     def syndrome(self, c_0, c_1):

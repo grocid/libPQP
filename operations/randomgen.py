@@ -21,4 +21,6 @@ class RandomGenerator:
         random_vector[list(random_indices)] = 1
         
         return random_vector
-        
+    
+    def flip_coin(self):
+        return self.gen.randrange(2)
