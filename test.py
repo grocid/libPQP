@@ -22,10 +22,6 @@ class Protocol:
         self.receiver_pkc_cipher = McEliece()
         self.receiver_pkc_cipher.set_private_key(self.priv_key)
         
-        io = IO()
-        print io.get_der_priv_key(self.priv_key)
-        print io.get_der_pub_key(self.pub_key)
-        
         # this is out asymmetric-cipher object
         self.sender_pkc_cipher = McEliece()
         
@@ -86,15 +82,12 @@ message = b'this is a really secret message that is padded with some random.'
 # create a protocol wrapper object
 protocol_test = Protocol()
 
-# encrypt and compte ciphertext / simulate sender
+# encrypt and compute ciphertext / simulate sender
 ciphertext = protocol_test.encrypt_message(message)
 
+# receive encoded ciphertext and interpret it
 io = IO()
 encoded_ciphertext= io.get_der_ciphertext(ciphertext[0], ciphertext[1], ciphertext[2])
-
-
-print encoded_ciphertext
-
 ciphertext = io.extract_der_ciphertext(encoded_ciphertext)
 
 # decrypt ciphertext / simulate receiver
