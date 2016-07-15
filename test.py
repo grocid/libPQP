@@ -58,7 +58,7 @@ class Protocol:
         rc_0, rc_1, symmetric_stream = ciphertext
         
         # decrypt necessary data
-        decrypted_token = to_bin(self.receiver_pkc_cipher.decrypt(rc_0, rc_1), self.priv_key.block_length / 8)
+        decrypted_token = to_bin(self.receiver_pkc_cipher.decrypt(rc_0, rc_1), (self.priv_key.block_length + 1) / 8)
         
         # derive keys from data
         decrypted_keyA = sha256(str(decrypted_token) + self.saltA).digest() # just some conversion
