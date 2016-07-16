@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import numpy as np
 
 from binascii import hexlify
+from hashlib import sha512
 
 def to_bin(vec, length):
     num = int(''.join([str(x) for x in list(vec)]), 2)
@@ -26,6 +27,10 @@ def to_bin(vec, length):
     
 def from_bin(binary):
     return np.array([int(x) for x in bin(int(hexlify(binary), 16))[2:]])
+
+# just some packing operation
+def pack(vec):
+    return sha512(''.join([str(x) for x in list(vec)])).digest()
     
 def to_int(vec):
     s = ''.join(str(x) for x in vec[::-1])

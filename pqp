@@ -1,0 +1,103 @@
+#!/usr/bin/env python
+
+'''
+This file is part of libPQP
+Copyright (C) 2016 Carl Londahl <carl.londahl@gmail.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+'''
+
+import numpy as np
+
+from crypto.protocol import *
+import argparse
+
+class CLITool:
+    
+    def __init__(self):
+        self.protocol = Protocol()
+    
+    def load_pubkey(self, filename):
+        f = open(filename, 'r')
+        self.protocol.set_public_key(f.read())
+    
+    def load_privkey(self, filename):
+        f = open(filename, 'r')
+        self.protocol.set_private_key(f.read())
+    
+    def encrypt(self, filename, write=False):
+        print 'Encrypting:', filename
+        f = open(filename, 'r')
+        ciphertext = self.protocol.encrypt_message(f.read(), self.protocol.pub_key)
+        if not write:
+            print ciphertext
+        else:
+            return ciphertext
+    
+    def decrypt(self, filename, write=False):
+        print 'Decrypting:', filename
+        f = open(filename, 'r')
+        message, verified = self.protocol.decrypt_message(f.read())
+        if verified: print 'MAC verified.'
+        else: print 'Invalid MAC!'
+        if not write: 
+            print message
+        else:
+            return message
+    
+    def generate_keypair(self, priv_filename, pub_filename):
+        print 'Generating keypair...'
+        self.protocol.generate_keypair()
+        
+        f = open(priv_filename, 'w')
+        f.write(self.protocol.get_private_key())
+        f = open(pub_filename, 'w')
+        f.write(self.protocol.get_public_key())
+        
+        print 'Wrote private key {priv_filename} and public key {pub_filename}.'\
+              .format(priv_filename=priv_filename, pub_filename=pub_filename)
+
+cli = CLITool()
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--pubkey',  nargs=1, help='load public key')
+parser.add_argument('--privkey', nargs=1, help='load private key')
+parser.add_argument('--encrypt', nargs=1, help='encrypt message', metavar=('MESSAGE'))
+parser.add_argument('--decrypt', nargs=1, help='decrypt message', metavar=('CIPHERTEXT'))
+parser.add_argument('--output',  nargs=1, help='output to file', metavar=('OUTFILE'))
+parser.add_argument('--gen',     nargs=2, help='generate keypair', metavar=('PRIVKEY', 'PUBKEY'))
+
+args = vars(parser.parse_args())
+
+if args['decrypt'] != None and args['privkey'] != None:
+    cli.load_privkey(args['privkey'][0])
+    if args['output'] == None:
+        cli.decrypt(args['decrypt'][0])
+    else:
+        f = open(args['output'][0], 'w')
+        f.write(cli.decrypt(args['decrypt'][0], write=True))
+    
+elif args['encrypt'] != None and args['pubkey'] != None:
+    cli.load_pubkey(args['pubkey'][0])
+    if args['output'] == None:
+        cli.encrypt(args['encrypt'][0])
+    else:
+        f = open(args['output'][0], 'w')
+        f.write(cli.encrypt(args['encrypt'][0], write=True))
+    
+elif args['gen']:
+    priv_filename, pub_filename = args['gen']
+    cli.generate_keypair(priv_filename, pub_filename)
+
+else: parser.print_help()

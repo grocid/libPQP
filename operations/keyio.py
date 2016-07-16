@@ -58,7 +58,7 @@ class IO:
         priv_key.H_0 = np.array(list(der['H0']))
         priv_key.H_1 = np.array(list(der['H1']))
         priv_key.H_1inv = np.array(list(der['H1inv']))
-        priv_key.block_length = len(priv_key.G)
+        priv_key.block_length = len(priv_key.H_0)
         return priv_key
 
     def get_der_priv_key(self, priv_key):
@@ -73,8 +73,9 @@ class IO:
         return template.format(data)
         
     def extract_der_pub_key(self, seq):
-        seq = seq.replace('-----BEGIN PQP PUBLIC KEY-----\n', '')
-        seq = seq.replace('-----END PQP PUBLIC KEY-----\n', '')
+        seq = seq.replace('-----BEGIN PQP PUBLIC KEY-----', '')
+        seq = seq.replace('-----END PQP PUBLIC KEY-----', '')
+        seq = seq.strip('\n')
         der = decoder.decode(base64.decodestring(seq), asn1Spec=ASN1PublicKey())[0]
         pub_key = PublicKey()
         pub_key.G = np.array(list(der['G']))
@@ -98,8 +99,9 @@ class IO:
         return template.format(data)
     
     def extract_der_ciphertext(self, seq):
-        seq = seq.replace('-----BEGIN PQP MESSAGE-----\n', '')
-        seq = seq.replace('-----END PQP MESSAGE-----\n', '')
+        seq = seq.replace('-----BEGIN PQP MESSAGE-----', '')
+        seq = seq.replace('-----END PQP MESSAGE-----', '')
+        seq = seq.strip('\n')
         der = decoder.decode(base64.decodestring(seq), asn1Spec=ASN1Ciphertext())[0]
         c_0 = np.array(list(der['C0']))
         c_1 = np.array(list(der['C1']))

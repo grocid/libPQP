@@ -50,13 +50,20 @@ class Protocol:
         self.priv_key, self.pub_key = keygen.generate()
         self.asymmetric_cipher.set_private_key(self.priv_key)
     
-    def load_private_key(self, filename):
-        f = open(filename, 'r')
-        key = io.extract_der_priv_key(f.read())
+    def set_private_key(self, key):
+        key = self.io.extract_der_priv_key(key)
         self.priv_key = key
+        self.asymmetric_cipher.set_private_key(key)
         
-    def save_keypair(self):
-        return
+    def set_public_key(self, key):
+        key = self.io.extract_der_pub_key(key)
+        self.pub_key = key
+    
+    def get_private_key(self):
+        return self.io.get_der_priv_key(self.priv_key)
+        
+    def get_public_key(self):
+        return self.io.get_der_pub_key(self.pub_key)
         
     def generate_mac(self, message, token, key):
         return sha256(message + str(token) + key).digest()
@@ -75,7 +82,7 @@ class Protocol:
     def encrypt_message(self, message, recv_pub_key):
         # generate random data
         randomized = self.randgen.get_random_vector(self.pub_key.block_length)
-        token = to_bin(randomized, (self.pub_key.block_length + 1) / 8)
+        token = pack(randomized)
         
         # derive keys
         keyA = sha256(str(token) + self.saltA).digest() # just some conversion
@@ -94,11 +101,11 @@ class Protocol:
                self.symmetric_cipher_enc(message, mac, keyA, iv))
     
     def decrypt_message(self, ciphertext):
+        # extract ciphertext data from DER
         rc_0, rc_1, symmetric_stream = self.io.extract_der_ciphertext(ciphertext)
         
         # decrypt necessary data
-        decrypted_token = to_bin(self.asymmetric_cipher.decrypt(rc_0, rc_1), \
-                          (self.priv_key.block_length + 1) / 8)
+        decrypted_token = pack(self.asymmetric_cipher.decrypt(rc_0, rc_1))
         
         # derive keys from data
         decrypted_keyA = sha256(str(decrypted_token) + self.saltA).digest() # just some conversion
