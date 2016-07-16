@@ -1,4 +1,4 @@
-# libPQP
+# libPQP - a Python post-quantum library
 
 This is a simplistic prototype of a post-quantum cryptography library in Python. PQP stands for Post-Quantum PGP. The library is not production ready and should not be used in a real-life context, but works fine for testing purposes. The plan is, once the code has been audited, to translate it to Javascript and create a webapp.
 
