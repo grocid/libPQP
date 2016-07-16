@@ -235,7 +235,20 @@ To decrypt, invoke the following command. To write to file, use the above method
 ```
 pqp --decrypt [ciphertext file] --privkey [private-key file]
 ```
- 
+
+#Installation
+
+Below are the required steps to make libPQP run on Linux (tested on Ubuntu 16.04 Xenial):
+
+```
+git clone https://github.com/grocid/libPQP.git
+sudo pip install numpy
+sudo pip install pycrypto
+sudo apt-get install libfftw3-dev
+sudo pip install pyFFTW
+sudo pip install pyasn1
+```
+
 #Possible vulnerabilities
 
 ##Decryption oracle
