@@ -29,7 +29,7 @@ from crypto.private_key import *
 from crypto.public_key import *
 from crypto.qcmdpc import *
 from crypto.keygen import *
-
+from crypto.pkcs import *
 
 class Protocol:
     
@@ -38,6 +38,7 @@ class Protocol:
         self.asymmetric_cipher = McEliece()        
         self.randgen = RandomGenerator()
         self.io = IO()
+        self.padding = PKCS7Encoder()
         
         # just some random salts
         self.saltA = b'this is just a salt'
@@ -70,11 +71,13 @@ class Protocol:
     
     def symmetric_cipher_enc(self, message, mac, key, iv):
         symmetric_cipher = AES.new(key, AES.MODE_CBC, iv)
-        return symmetric_cipher.encrypt(message + mac)
+        padded = self.padding.encode(message + mac)
+        return symmetric_cipher.encrypt(padded)
     
     def symmetric_cipher_dec(self, ciphertext, key, iv):
         symmetric_cipher = AES.new(key, AES.MODE_CBC, iv)
-        decrypted = symmetric_cipher.decrypt(ciphertext)
+        decrypted_padded = symmetric_cipher.decrypt(ciphertext)
+        decrypted = self.padding.decode(decrypted_padded)
         mac = decrypted[-32:]
         message = decrypted[:-32]
         return message, mac
