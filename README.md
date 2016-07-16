@@ -20,7 +20,7 @@ Below are given the proposed parameters for rate R = 1/2.
 |      9857       | 19714            |     1/2        |     134       |    128       |
 |       32771     | 65542            |     1/2        |     264       |   256        |
  
-Since the encrypted token is a codeword of length 9602 (for 80-bit security), we add approximately 1200 bytes of data to the ciphertext. Apart from this, a 32-byte MAC is included. This inflates a (padded) message of size M to size 1232 + M. For higher security levels, the inflation will be larger — but still constant.
+Since the encrypted token is a codeword of length 9602 (for 80-bit security), we add approximately 1200 bytes of data to the ciphertext. Apart from this, a 32-byte MAC is included. This inflates a (padded) message of size M to size 1232 + M. For higher security levels, the inflation will be larger — but still constant. In the DER format, the inflation is about 35 %.
 
 # What is post-quantum cryptography?
 
@@ -259,6 +259,34 @@ This is a slight variation of the above. Instead of observing decryption errors,
 The decoding we use is probabilistic and susceptible to timing attacks. However, in the PGP-like setting we do not worry too much about this. Below is a graph of timings of my computer (Macbook Pro 15" Retina 2 GHz Intel Core i7) running 1000 decryptions using the same private key (σ = 0.0386, μ = 0.493):
 
 ![protocol receiver](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/timings.png)
+
+Here is the output of encrypting and decrypting a 190 mb video file:
+
+```
+$ time ./pqp --encrypt libpqp.mov --pubkey pub --output libpqp.enc
+Encrypting: libpqp.mov
+
+real   0m11.331s
+user   0m9.293s
+sys   0m1.715s
+
+$ time ./pqp --decrypt libpqp.enc --privkey priv --output libpqp2.mov
+Decrypting: libpqp.enc
+MAC verified.
+
+real   0m11.422s
+user   0m8.633s
+sys   0m2.446s
+
+$ ls -la libpqp.* 
+-rw-r--r--  1 carl  staff  258900672 17 Jul 00:57 libpqp.enc
+-rw-r--r--@ 1 carl  staff  191652442 16 Jul 23:22 libpqp.mov
+
+$ md5 libpqp2.mov 
+MD5 (libpqp2.mov) = 88ebe9d8aa74ebba7c5de6faa048af46
+$ md5 libpqp.mov 
+MD5 (libpqp.mov) = 88ebe9d8aa74ebba7c5de6faa048af46
+```
 
 ##Distinguishing attacks
 
