@@ -213,7 +213,7 @@ KHde
 ```
 
 #Command-line tool
-The library can be invoked by a supplied CLI tool (the pqp file).
+The library can be invoked by a supplied CLI tool (the pqp file). Padding is not included, so some kind of PKCS padding will be added.
 
 To generate a keypair, run the following command:
 ```
