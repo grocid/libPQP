@@ -210,11 +210,35 @@ JGPyik2nqjqIJXK95F9omr4FgARgSUda/5bzJK/tJUuixFOWWaimI+WtgJDsIV8velkaaVvxL8xz
 K7PlOCNoMaZYC+z/GkenwwvNr0f+uGiPYShao0/Ie7NhC2C2tj61OENmc+OJ1zy1qLE1ApJOlVL3
 KHde
 -----END PQP MESSAGE-----
-  ```
- 
-##Possible vulnerabilities
+```
 
-###Decryption oracle
+#Command-line tool
+The library can be invoked by a supplied CLI tool (the pqp file).
+
+To generate a keypair, run the following command:
+```
+pqp --gen [private-key file] [public-key file]
+```
+This creates two files in the same folder containing the two keys.
+
+To encrypt a file, call pqp as follows:
+```
+pqp --encrypt [plaintext file] --pubkey [public-key file]
+```
+
+This writes an ASN.1 encoded ciphertext to stdout. Appending --output writes to file:
+```
+pqp --encrypt [plaintext file] --pubkey [public-key file] --outout [ciphertext file]
+```
+
+To decrypt, invoke the following command. To write to file, use the above methodology.
+```
+pqp --decrypt [ciphertext file] --privkey [private-key file]
+```
+ 
+#Possible vulnerabilities
+
+##Decryption oracle
 The protocol can be designed using normal McEliece or Niederreiter. In case of McEliece, the error vector should be part of the authentication (for instance, generate MAC using a concatenation of message and error vector). Such a measure will mitigate the usual decryption oracle attack, described below.
 
 ```
@@ -228,7 +252,7 @@ Obviously, there is an implicit assumption that the receiver will either reject 
 
 If the protocol instead is designed using the Niederreiter model, the error vector will be/encode the token. In this case, there is no need to authenticate the error vector. Since any flipped bit in the ciphertext will cause the receiver to decode a different token, it will break the decryption oracle.
 
-###Timing attacks
+##Timing attacks
 
 This is a slight variation of the above. Instead of observing decryption errors, we measure the timing. There has been some effort in making decoding run in constant time. See [this paper](http://www.win.tue.nl/~tchou/papers/qcbits.pdf).
 
@@ -236,7 +260,7 @@ The decoding we use is probabilistic and susceptible to timing attacks. However,
 
 ![protocol receiver](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/timings.png)
 
-###Distinguishing attacks
+##Distinguishing attacks
 
 The simplest imaginable distinguisher will detect a constant-error encryption with probability 1. 
 
@@ -254,7 +278,7 @@ The theory is described in more detail [here](https://grocid.net/2015/01/28/atta
 
 This attack is contained in [distinguisher.py](https://github.com/grocid/encrypt.life-python/blob/master/distinguisher.py).
 
-###Squaring/subcode attacks
+##Squaring/subcode attacks
 
 Squaring attacks exploit that (the now deprecated) p = 4800 = 2⁶ × 75. By squaring the polynomial, the vector space decreases in size by a factor 2 (which can be done six times). It may also lead to collisions in the error vector, causing a decrease in error weight. This allows an attacker to go quite far below 80-bit security. See [this paper](http://link.springer.com/article/10.1007/s10623-015-0099-x).
 
