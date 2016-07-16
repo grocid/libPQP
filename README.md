@@ -278,9 +278,10 @@ real   0m11.422s
 user   0m8.633s
 sys   0m2.446s
 
-$ ls -la libpqp.* 
+$ ls -la libpqp* 
 -rw-r--r--  1 carl  staff  258900672 17 Jul 00:57 libpqp.enc
 -rw-r--r--@ 1 carl  staff  191652442 16 Jul 23:22 libpqp.mov
+-rw-r--r--@ 1 carl  staff  191652442 17 Jul 00:58 libpqp2.mov
 
 $ md5 libpqp2.mov 
 MD5 (libpqp2.mov) = 88ebe9d8aa74ebba7c5de6faa048af46
