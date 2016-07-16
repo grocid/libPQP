@@ -1,3 +1,21 @@
+'''
+This file is part of libPQP
+Copyright (C) 2016 Carl Londahl <carl.londahl@gmail.com>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+'''
+
 from operations.arithmetic import *
 from operations.randomgen import *
 
@@ -24,8 +42,7 @@ class McEliece:
         return pub_key
     
     def encrypt(self, pub_key, m):
-        print pub_key.block_error + self.randgen.flip_coin()
-        print pub_key.block_error + self.randgen.flip_coin()
+        # non-constant weight to achieve cipertext indistinguishability
         v = (mul_poly(pub_key.G, m) + self.randgen.get_random_weight_vector( \
             pub_key.block_length, pub_key.block_error + self.randgen.flip_coin())) % 2
         u = (m + self.randgen.get_random_weight_vector(pub_key.block_length, \

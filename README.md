@@ -49,7 +49,7 @@ Note that these operations require basically no work at all, so encryption is ve
 3. Having c' = m × S, the message is formed by removing the S, i.e., c' × inv(S) = m × S × inv(S) = m.
 ```
 
-The QC-MDPC McEliece is a bit different, but the principle is the same. Instead of using matrices, it operates on polynomials (or, equivalently, circular matrices). Here, the private key is two sparse polynomials H₀ and H₁, which can be used to perform efficient decoding. H₀ and H₁ form the private key. The public key is H₀ × inv(H₁), which is not sparse and (presumably) cannot be used for efficient decoding. Encryption and decryption is done is similar ways to the above.
+The QC-MDPC McEliece is a bit different, but the principle is the same. Instead of using matrices, it operates on polynomials (or, equivalently, circular matrices). Here, the private key consists of two sparse polynomials H₀ and H₁, which can be used to perform efficient decoding. H₀ and H₁ form the private key. The public key is H₀ × inv(H₁), which is not sparse and (presumably) cannot be used for efficient decoding. Encryption and decryption is done is similar ways to the above.
 
 
 # High-level description
