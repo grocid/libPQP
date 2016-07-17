@@ -212,6 +212,41 @@ KHde
 -----END PQP MESSAGE-----
 ```
 
+#Performance
+Below is a graph of timings of my computer (Macbook Pro 15" Retina 2 GHz Intel Core i7) running 1000 decryptions using the same private key (σ = 0.0386, μ = 0.493):
+
+![timings](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/timings.png)
+
+Here is the output of encrypting and decrypting a 190 mb video file:
+
+```
+$ time ./pqp --encrypt libpqp.mov --pubkey pub --output libpqp.enc
+Encrypting: libpqp.mov
+
+real   0m11.331s
+user   0m9.293s
+sys   0m1.715s
+
+$ time ./pqp --decrypt libpqp.enc --privkey priv --output libpqp2.mov
+Decrypting: libpqp.enc
+MAC verified.
+
+real   0m11.422s
+user   0m8.633s
+sys   0m2.446s
+
+$ ls -la libpqp* 
+-rw-r--r--  1 carl  staff  258900672 17 Jul 00:57 libpqp.enc
+-rw-r--r--@ 1 carl  staff  191652442 16 Jul 23:22 libpqp.mov
+-rw-r--r--@ 1 carl  staff  191652442 17 Jul 00:58 libpqp2.mov
+
+$ md5 libpqp2.mov 
+MD5 (libpqp2.mov) = 88ebe9d8aa74ebba7c5de6faa048af46
+
+$ md5 libpqp.mov 
+MD5 (libpqp.mov) = 88ebe9d8aa74ebba7c5de6faa048af46
+```
+
 #Command-line tool
 The library can be invoked by a supplied CLI tool (the pqp file). Padding is not included, so some kind of PKCS padding will be added.
 
@@ -269,39 +304,11 @@ If the protocol instead is designed using the Niederreiter model, the error vect
 
 This is a slight variation of the above. Instead of observing decryption errors, we measure the timing. There has been some effort in making decoding run in constant time. See [this paper](http://www.win.tue.nl/~tchou/papers/qcbits.pdf).
 
-The decoding we use is probabilistic and susceptible to timing attacks. However, in the PGP-like setting we do not worry too much about this. Below is a graph of timings of my computer (Macbook Pro 15" Retina 2 GHz Intel Core i7) running 1000 decryptions using the same private key (σ = 0.0386, μ = 0.493):
+The decoding we use is probabilistic and susceptible to timing attacks. Below is an image with the timing attack implemented running 15 decryptions for each bit flipped.
 
-![protocol receiver](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/timings.png)
+![timings](https://github.com/grocid/encrypt.life-python/blob/master/timingattack.png)
 
-Here is the output of encrypting and decrypting a 190 mb video file:
-
-```
-$ time ./pqp --encrypt libpqp.mov --pubkey pub --output libpqp.enc
-Encrypting: libpqp.mov
-
-real   0m11.331s
-user   0m9.293s
-sys   0m1.715s
-
-$ time ./pqp --decrypt libpqp.enc --privkey priv --output libpqp2.mov
-Decrypting: libpqp.enc
-MAC verified.
-
-real   0m11.422s
-user   0m8.633s
-sys   0m2.446s
-
-$ ls -la libpqp* 
--rw-r--r--  1 carl  staff  258900672 17 Jul 00:57 libpqp.enc
--rw-r--r--@ 1 carl  staff  191652442 16 Jul 23:22 libpqp.mov
--rw-r--r--@ 1 carl  staff  191652442 17 Jul 00:58 libpqp2.mov
-
-$ md5 libpqp2.mov 
-MD5 (libpqp2.mov) = 88ebe9d8aa74ebba7c5de6faa048af46
-
-$ md5 libpqp.mov 
-MD5 (libpqp.mov) = 88ebe9d8aa74ebba7c5de6faa048af46
-```
+However, in the PGP-like setting we do not worry too much about this.
 
 ##Distinguishing attacks
 
