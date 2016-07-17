@@ -83,7 +83,7 @@ class IO:
         return pub_key
 
     def get_der_pub_key(self, pub_key):
-        template = '-----BEGIN PQP PUBLIC KEY-----\n{}-----END PQP PUBLIC-----\n'
+        template = '-----BEGIN PQP PUBLIC KEY-----\n{}-----END PQP PUBLIC KEY-----\n'
         der = ASN1PublicKey()
         der['G'] = self.to_bitstring(pub_key.G)
         data = base64.encodestring(encoder.encode(der))
