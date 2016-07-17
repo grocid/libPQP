@@ -213,7 +213,7 @@ KHde
 ```
 
 #Performance
-Below is a graph of timings of my computer (Macbook Pro 15" Retina 2 GHz Intel Core i7) running 1000 decryptions using the same private key (σ = 0.0386, μ = 0.493):
+Below is a graph of timings of my computer (Macbook Pro 15" Retina 2 GHz Intel Core i7) running 1000 decryptions of a small plaintext (thus, isolating the asymmetric timing) using the same private key (σ = 0.0386, μ = 0.493):
 
 ![timings](https://raw.githubusercontent.com/grocid/encrypt.life-python/master/timings.png)
 
