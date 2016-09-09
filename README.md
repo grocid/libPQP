@@ -1,6 +1,8 @@
 # libPQP - a Python post-quantum library
 
-*Update 8 September 2016*: libPQP is deprecated due to a [newly published attack](http://eprint.iacr.org/2016/858.pdf).
+*Update 8 September 2016*: Current version of libPQP is deprecated due to a [newly published attack](http://eprint.iacr.org/2016/858.pdf). Possible mitigations:
+* Forward-secrecy method where the secret key and corresponding public key gets updated over short intervals.
+* Automatically reject any message which is decoded with higher error rate than some constant t, where t implies a negligable decoding error.
 
 This is a simplistic prototype of a post-quantum cryptography library in Python. PQP stands for Post-Quantum PGP. The library is not production ready and should not be used in a real-life context, but works fine for testing purposes. The plan is, once the code has been audited, to translate it to Javascript and create a webapp.
 
